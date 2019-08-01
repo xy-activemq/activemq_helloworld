@@ -8,7 +8,7 @@ import javax.jms.*;
 public class Producer {
 
     public static final String ACTIVE_URI = "tcp://192.168.36.132:61616";
-    public static final String QUEUE_NAME = "xy_demo1_3";
+    public static final String QUEUE_NAME = "xy_demo1_1";
 
     public static void main(String[] args) {
 
@@ -35,6 +35,8 @@ public class Producer {
                 producer.send(textMessage);
             }
 
+            //如果transacted是true，需要加入
+//            session.commit();
             producer.close();
             session.close();
             connection.close();

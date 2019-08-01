@@ -8,7 +8,7 @@ import javax.jms.*;
 public class Consumer {
 
     public static final String ACTIVE_URI = "tcp://192.168.36.132:61616";
-    public static final String QUEUE_NAME = "xy_demo1_3";
+    public static final String QUEUE_NAME = "xy_demo1_1";
 
     public static void main(String[] args) {
 
@@ -29,15 +29,18 @@ public class Consumer {
             MessageConsumer consumer = session.createConsumer(queue);
 
             while (true) {
-
-                TextMessage textMessage = (TextMessage) consumer.receive();
+                //开启事务的时候一定要有timeout参数，否则不会运行下面的事务提交的代码
+                TextMessage textMessage = (TextMessage) consumer.receive(4000);
                 if (textMessage != null) {
                     String text = textMessage.getText();
                     System.out.println("text = [" + text + "]");
+//                    textMessage.acknowledge();
                 } else {
                     break;
                 }
             }
+            //如果transacted是true，没有session commit，则会重复消费
+//            session.commit();
             consumer.close();
             session.close();
             connection.close();
